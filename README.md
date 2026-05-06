@@ -1,157 +1,368 @@
-# MozAluz .RBGI Format SDK
+# .RBGI Format SDK
 
-**MozAluz .RBGI Format SDK** is the official open-source format library / SDK for working with `.RBGI` files.
+**.RBGI**, also known as **Render Background Image**, is a custom image format created for render background images, skybox-style backgrounds, and other project-specific background image use cases.
 
-`.RBGI` stands for **Render Background Image**. It is a simple image format used by the MozAluz RBGI Tools project for render backgrounds, preview backgrounds, skybox-style images, and other image-based rendering resources.
+This repository contains the **open-source .RBGI Format SDK / Format DLL source files**.  
+The goal of this SDK is to make the `.RBGI` format documented, usable, and easy to support in other programs.
 
-This repository contains the source files for the **.RBGI Format DLL / SDK only**.
-
-The official **MozAluz RBGI Viewer** and **MozAluz RBGI Editor** are closed-source applications and are not included in this repository.
+> **Important:**  
+> This repository is only for the `.RBGI` format source files, SDK code, headers, examples, and documentation.  
+> **MozAluz RBGI Viewer** and **MozAluz RBGI Editor** are official closed-source applications and are not part of this open-source SDK.
 
 ---
 
 ## What is `.RBGI`?
 
-`.RBGI` means:
+`.RBGI` stands for:
 
 ```txt
 Render Background Image
 ```
 
-The format was originally created for the MozAluz RBGI Tools suite as a custom image type for render backgrounds.
+The format was originally created for **Source BSP Explorer**, also known as **SBSPE**.
 
-In the current public version, `.RBGI` is designed to be simple, portable, and easy to support. Version 1 of the format stores image data using PNG-compatible image encoding while using the `.RBGI` extension to identify the file as a MozAluz render background image.
+Source BSP Explorer needed a custom background/skybox image system for its renderer. Instead of using regular image formats like `.PNG`, `.JPG`, or `.JPEG` directly for that purpose, `.RBGI` was created as a dedicated format for render background images.
 
-That means `.RBGI` files are intentionally easy to load, save, convert, and preview.
-
-Future versions of the format may add extra metadata, render mode settings, background environment information, cube-map data, compression options, or other MozAluz-specific features.
-
----
-
-## Why is only the Format SDK open-source?
-
-The `.RBGI` format library is open-source so other developers can:
-
-- add `.RBGI` support to their own programs
-- inspect how `.RBGI` files are loaded and saved
-- build compatible tools
-- improve format support
-- make converters, previewers, plugins, or command-line tools
-- use `.RBGI` files in other rendering projects
-
-The official MozAluz RBGI Viewer and MozAluz RBGI Editor are closed-source official tools. They are separate from this SDK.
-
-This allows the format itself to stay open and developer-friendly while keeping the official Viewer and Editor under the MozAluz project.
-
----
-
-## Repository Contents
-
-The exact layout may change over time, but this SDK is intended to include files such as:
+In simple terms:
 
 ```txt
-/RBGIFormatSDK
-    /include
-        RBGIFormat.h
-    /src
-        RBGIFormat.cpp
-    /docs
-        RBGI_FORMAT.md
-    /examples
-        ReadRBGIExample.cpp
-        WriteRBGIExample.cpp
-    LICENSE
-    README.md
+.RBGI = a custom render-background image file format
 ```
 
-Recommended file purposes:
+It is designed for tools and engines that need a special image type for things like:
 
-| File / Folder | Purpose |
-| --- | --- |
-| `include/` | Public headers for using the SDK |
-| `src/` | Source files for the format DLL / static library |
-| `docs/` | Extra format documentation |
-| `examples/` | Example programs showing how to use the SDK |
-| `LICENSE` | License for the SDK |
-| `README.md` | Main documentation for the GitHub page |
+- custom render backgrounds
+- skybox-style background images
+- editor background images
+- viewport background textures
+- project-specific image assets
+- metadata-supported background files
 
 ---
 
-## Features
+## Why was `.RBGI` created?
 
-The SDK is intended to provide:
+The `.RBGI` format was created because Source BSP Explorer needed a dedicated background image format.
 
-- `.RBGI` file loading
-- `.RBGI` file saving
-- PNG-compatible image data support
-- simple C/C++ API
-- optional DLL export support
-- easy integration into other software
-- basic validation for `.RBGI` files
-- future support for `.RBGI` metadata
-- future support for render-specific format extensions
+The original reason was:
 
----
+- Source BSP Explorer needed a custom background skybox image.
+- The background image was meant to be part of SBSPE's own asset/tool system.
+- Using `.PNG`, `.JPEG`, or another normal image format directly did not feel right for this specific render-background use case.
+- A custom extension made the file's purpose clear.
+- Metadata support could be added for future render/background settings.
 
-## Current Format Version
-
-Current public format version:
+So instead of having something like:
 
 ```txt
-RBGI Format Version: 1
+Render_BG.png
+Render_BG.jpg
+Render_BG.jpeg
 ```
 
-Version 1 behavior:
+Source BSP Explorer could use:
 
 ```txt
-.RBGI files use PNG-compatible encoded image data with the .RBGI extension.
+Render_BG.RBGI
 ```
 
-This keeps the format simple and easy to support while still allowing MozAluz tools to recognize `.RBGI` as a special render-background image type.
+That makes the file immediately recognizable as a **Render Background Image** used by the tool.
 
 ---
 
-## Planned Format Ideas
+## Format concept
 
-Possible future additions:
+`.RBGI` files are image files made for render-background usage.
 
-- embedded `.RBGI` metadata
-- render mode hints
-- background type information
-- cube-map image support
-- 3D preview settings
-- image author / project metadata
-- version tags
-- thumbnail data
-- optional compression settings
-- editor history information
-- color-space metadata
-- skybox/environment settings
+The image data itself is similar to PNG-style image data, but `.RBGI` files are intended to also support metadata for extra information.
 
-These features are not guaranteed yet, but the SDK is designed so the format can grow over time.
+A `.RBGI` file can contain:
+
+- image data
+- format/version information
+- optional metadata
+- tool-specific information
+- render/background-related settings
+- future extension data
+
+The exact structure may change as the SDK develops, but the main idea is:
+
+```txt
+Image data + RBGI metadata + render-background purpose
+```
 
 ---
 
-## Official Tools
+## Current format notes
 
-The official MozAluz applications are:
+In the current format design, `.RBGI` files are very close to PNG-style image files in how the actual image data is stored.
+
+That means:
+
+- the image data can be treated similarly to PNG image data
+- `.RBGI` keeps its own extension and purpose
+- metadata can be used to store extra information
+- future versions can expand the format without changing the basic purpose
+
+This makes `.RBGI` simple enough to support, while still allowing it to grow into a more complete render-background format later.
+
+---
+
+## Official tools
+
+The official tools for working with `.RBGI` files are:
 
 ```txt
 MozAluz RBGI Viewer
 MozAluz RBGI Editor
 ```
 
-These are the official programs for opening, viewing, previewing, and editing `.RBGI` files.
+These tools are used to:
 
-The Viewer and Editor are closed-source and are not part of this repository.
+- view `.RBGI` files
+- create `.RBGI` files
+- edit `.RBGI` files
+- preview `.RBGI` backgrounds
+- manage `.RBGI` metadata
 
-This repository is only for the `.RBGI` Format SDK / DLL source files.
+However, these applications are **not open-source**.
+
+This SDK exists so the format itself can still be public and usable by other developers without making the full Viewer or Editor source code public.
 
 ---
 
-## Example Usage
+## What is open-source?
 
-The actual API may change depending on the version of the SDK, but a basic use case may look like this:
+This repository may include:
+
+```txt
+.RBGI Format DLL source files
+.RBGI SDK headers
+.RBGI format documentation
+example code
+test files
+metadata documentation
+basic read/write helpers
+```
+
+The open-source part is the format support layer.
+
+That means other developers can use this repository to:
+
+- load `.RBGI` files
+- save `.RBGI` files
+- validate `.RBGI` files
+- read image data from `.RBGI` files
+- write image data to `.RBGI` files
+- read or write supported metadata
+- add `.RBGI` support to their own tools
+
+---
+
+## What is not open-source?
+
+The following projects are **closed-source official applications**:
+
+```txt
+MozAluz RBGI Viewer
+MozAluz RBGI Editor
+```
+
+These are not included in this SDK.
+
+The closed-source applications may use the open-source Format DLL / SDK, but their full source code is not part of this repository.
+
+---
+
+## Recommended repository layout
+
+A good layout for this SDK is:
+
+```txt
+RBGI-Format-SDK/
+│
+├─ README.md
+├─ LICENSE
+├─ CHANGELOG.md
+│
+├─ docs/
+│  ├─ RBGI_FORMAT.md
+│  ├─ METADATA.md
+│  └─ VERSIONING.md
+│
+├─ include/
+│  └─ RBGIFormat.h
+│
+├─ src/
+│  └─ RBGIFormat.cpp
+│
+├─ examples/
+│  ├─ ReadRBGI/
+│  ├─ WriteRBGI/
+│  └─ MetadataExample/
+│
+├─ tests/
+│  └─ test_files/
+│
+└─ samples/
+   └─ Render_BG.RBGI
+```
+
+Not every folder is required immediately, but this structure keeps the SDK organized as it grows.
+
+---
+
+## Suggested SDK goals
+
+The `.RBGI Format SDK` should aim to provide:
+
+- a clean public C/C++ API
+- simple read/write functions
+- file validation
+- metadata support
+- version checking
+- safe error handling
+- example projects
+- clear documentation
+- compatibility notes for future `.RBGI` versions
+
+---
+
+## Possible SDK features
+
+Depending on how far the SDK is developed, it may support:
+
+### File loading
+
+Load an existing `.RBGI` file from disk.
+
+```txt
+Input:  file path
+Output: decoded image data + metadata
+```
+
+### File saving
+
+Save image data into a `.RBGI` file.
+
+```txt
+Input:  width, height, pixel/image data, metadata
+Output: .RBGI file
+```
+
+### Validation
+
+Check whether a file is a valid `.RBGI` file.
+
+Possible validation checks:
+
+- file exists
+- file extension is `.RBGI`
+- image data can be read
+- metadata block is valid
+- format version is supported
+- file is not empty or corrupted
+
+### Metadata reading
+
+Read metadata from a `.RBGI` file.
+
+Possible metadata fields:
+
+```txt
+Title
+Author
+Description
+CreatedWith
+CreatedDate
+FormatVersion
+SourceProject
+RenderMode
+BackgroundType
+Notes
+```
+
+### Metadata writing
+
+Write or update metadata in a `.RBGI` file.
+
+### Format versioning
+
+Allow `.RBGI` files to store a format version, such as:
+
+```txt
+RBGI_FORMAT_VERSION=1
+```
+
+This makes it easier to support older and newer versions later.
+
+---
+
+## Suggested metadata fields
+
+The SDK can support metadata such as:
+
+```ini
+[RBGI]
+FormatVersion=1
+FileType=Render Background Image
+CreatedWith=MozAluz RBGI Editor
+SourceProject=Source BSP Explorer
+
+[Image]
+Width=256
+Height=256
+ColorDepth=32
+HasAlpha=true
+
+[Render]
+BackgroundType=Skybox
+RenderMode=Flat
+UseAsViewportBackground=true
+
+[Info]
+Title=Render_BG
+Author=sonic Fan Tech
+Description=Default render background image for Source BSP Explorer.
+```
+
+This is only an example. The real metadata structure may be different depending on how the SDK stores metadata internally.
+
+---
+
+## Example use cases
+
+`.RBGI` can be used for:
+
+- Source BSP Explorer background images
+- custom render viewport backgrounds
+- map editor backgrounds
+- skybox preview textures
+- game development tools
+- level editor visual assets
+- launcher or tool background images
+- custom image pipelines
+- asset formats for closed or open-source tools
+
+---
+
+## Example file names
+
+Common `.RBGI` file names could include:
+
+```txt
+Render_BG.RBGI
+DefaultBackground.RBGI
+SkyboxPreview.RBGI
+ViewportBackground.RBGI
+EditorBackground.RBGI
+```
+
+---
+
+## Example usage
+
+The actual API may change depending on how the SDK is structured, but a simple C++ usage style could look like this:
 
 ```cpp
 #include "RBGIFormat.h"
@@ -160,19 +371,20 @@ int main()
 {
     RBGI_Image image;
 
-    if (!RBGI_Load("background.rbgi", &image))
+    if (!RBGI_LoadFromFile("Render_BG.RBGI", &image))
     {
+        // Failed to load the file
         return 1;
     }
 
-    // Use image data here.
+    // Use image data here
 
-    RBGI_Free(&image);
+    RBGI_FreeImage(&image);
     return 0;
 }
 ```
 
-Saving an image may look like this:
+A save example could look like this:
 
 ```cpp
 #include "RBGIFormat.h"
@@ -184,10 +396,16 @@ int main()
     image.width = 256;
     image.height = 256;
     image.channels = 4;
-    image.data = /* your RGBA image data */ nullptr;
+    image.data = /* image pixel data */;
 
-    if (!RBGI_Save("new_background.rbgi", &image))
+    RBGI_Metadata metadata = {};
+    metadata.title = "Render_BG";
+    metadata.author = "sonic Fan Tech";
+    metadata.description = "Default Source BSP Explorer render background image.";
+
+    if (!RBGI_SaveToFile("Render_BG.RBGI", &image, &metadata))
     {
+        // Failed to save the file
         return 1;
     }
 
@@ -195,368 +413,258 @@ int main()
 }
 ```
 
-These examples are only general examples. Check the actual SDK headers for the current API.
+These examples are meant to show the intended style of the SDK. The actual function names may differ depending on the current implementation.
 
 ---
 
-## Building from Source
+## Building the SDK
 
-### Requirements
+The build process depends on how the SDK project files are included.
 
-Recommended build tools:
+### Visual Studio / MSVC
 
-- Windows 10 or newer
-- Visual Studio 2022 or newer
-- C++17 or newer
-- A C++ compiler such as MSVC
-- Optional: CMake, if the project later adds CMake support
-
-The SDK is intended to stay lightweight and should not require the full MozAluz Viewer or Editor source code.
-
----
-
-### Build with Visual Studio
-
-1. Clone or download this repository.
-2. Open the Visual Studio solution file, if one is included.
-3. Select the build configuration:
-   - `Debug x64`
-   - `Release x64`
-4. Build the project.
-5. The output should produce one or more of the following:
-   - `RBGIFormat.dll`
-   - `RBGIFormat.lib`
-   - `RBGIFormat.pdb`
-   - static library output, if supported
-
-Example output layout:
+If this repository includes a Visual Studio solution:
 
 ```txt
-/bin
-    RBGIFormat.dll
-    RBGIFormat.lib
+1. Open the .sln file in Visual Studio.
+2. Select Debug or Release.
+3. Select x64.
+4. Build the solution.
+5. The output DLL/static library should appear in the build output folder.
 ```
 
----
-
-### Build as a DLL
-
-When building as a DLL, the public API should use export/import macros similar to:
-
-```cpp
-#ifdef RBGI_FORMAT_EXPORTS
-#define RBGI_API __declspec(dllexport)
-#else
-#define RBGI_API __declspec(dllimport)
-#endif
-```
-
-This allows the same header to be used when building the DLL and when using the DLL from another project.
-
----
-
-### Build as a Static Library
-
-If static library support is added, the SDK may also be built as:
+Recommended output names:
 
 ```txt
-RBGIFormat.lib
-```
-
-Static builds are useful when you want to include `.RBGI` support directly inside your program without shipping a separate DLL.
-
----
-
-## Integrating the SDK into Your Project
-
-To use the SDK in another C++ project:
-
-1. Add the SDK `include/` folder to your compiler include directories.
-2. Link against `RBGIFormat.lib`, if using the DLL/import library.
-3. Place `RBGIFormat.dll` next to your program executable.
-4. Include the SDK header:
-
-```cpp
-#include "RBGIFormat.h"
-```
-
-5. Use the API to load or save `.RBGI` files.
-
-Example program layout:
-
-```txt
-MyProgram.exe
 RBGIFormat.dll
+RBGIFormat.lib
+RBGIFormat.pdb
 ```
+
+### Manual C++ build
+
+If the SDK is simple and only has a few source files, it can also be compiled manually.
+
+Example:
+
+```bat
+cl /EHsc /LD src\RBGIFormat.cpp /Iinclude /Fe:RBGIFormat.dll
+```
+
+This command is only an example and may need to be changed depending on dependencies and source file names.
 
 ---
 
-## File Extension
+## Using the DLL in another project
 
-The official file extension is:
+A program that wants to use the `.RBGI Format DLL` would usually need:
 
 ```txt
-.rbgi
+RBGIFormat.dll
+RBGIFormat.lib
+RBGIFormat.h
 ```
 
-Recommended display name:
+Typical setup:
 
 ```txt
-Render Background Image
+1. Add include/ to your compiler include paths.
+2. Link against RBGIFormat.lib.
+3. Place RBGIFormat.dll beside your executable.
+4. Include RBGIFormat.h in your project.
+5. Call the SDK loading/saving functions.
 ```
 
-Recommended MIME-style name, if needed:
+Example folder layout:
 
 ```txt
-image/x-rbgi
+MyProgram/
+│
+├─ MyProgram.exe
+├─ RBGIFormat.dll
+│
+└─ assets/
+   └─ Render_BG.RBGI
 ```
 
 ---
 
-## Format Compatibility
+## Compatibility
 
-Current `.RBGI` files are intended to be compatible with the MozAluz RBGI Tools project.
+The SDK should aim to support:
 
-Because version 1 uses PNG-compatible image data, developers may be able to inspect or recover image data using PNG-compatible tools. However, programs should not assume that all future `.RBGI` versions will behave exactly like normal PNG files.
+```txt
+Windows 10
+Windows 11
+Visual Studio 2022 or newer
+x64 builds
+```
 
-For best compatibility, use the official SDK when possible.
-
----
-
-## Recommended Use Cases
-
-`.RBGI` files can be used for:
-
-- render backgrounds
-- skybox-style preview backgrounds
-- OpenGL preview backgrounds
-- custom editor backgrounds
-- project thumbnails
-- game tool resources
-- Source BSP Explorer render backgrounds
-- MozAluz Viewer and Editor files
-- other image-based tool resources
-
----
-
-## What This SDK Is Not
-
-This SDK is not:
-
-- the full MozAluz RBGI Viewer source code
-- the full MozAluz RBGI Editor source code
-- a full paint program
-- a full image editor
-- a replacement for PNG
-- a general-purpose image standard
-
-It is a small format SDK for supporting `.RBGI` files.
+Other platforms may work if the code avoids Windows-only APIs, but official support depends on the SDK implementation.
 
 ---
 
 ## Versioning
 
-The SDK and format may use separate version numbers.
+The `.RBGI` format should use version numbers so future changes do not break older files.
+
+Recommended version naming:
+
+```txt
+RBGI Format v1
+RBGI Format v1.1
+RBGI Format v2
+```
+
+Recommended SDK version naming:
+
+```txt
+RBGI Format SDK v1.0.0
+RBGI Format SDK v1.1.0
+RBGI Format SDK v2.0.0
+```
+
+A good rule:
+
+- patch version changes fix bugs
+- minor version changes add compatible features
+- major version changes may change the format or API
 
 Example:
 
 ```txt
-SDK Version: 1.0.0
-RBGI Format Version: 1
-```
-
-The SDK version refers to the code release.
-
-The format version refers to the file format itself.
-
-This allows the SDK to receive updates without always changing the actual file format.
-
----
-
-## Recommended Version Rules
-
-Patch updates:
-
-```txt
-1.0.1
-1.0.2
-1.0.3
-```
-
-Use patch updates for:
-
-- bug fixes
-- build fixes
-- small API fixes
-- documentation updates
-
-Minor updates:
-
-```txt
-1.1.0
-1.2.0
-```
-
-Use minor updates for:
-
-- new helper functions
-- new examples
-- better validation
-- optional metadata helpers
-
-Major updates:
-
-```txt
-2.0.0
-```
-
-Use major updates for:
-
-- breaking API changes
-- major format changes
-- incompatible file structure changes
-
----
-
-## Suggested API Goals
-
-The public SDK API should try to stay:
-
-- simple
-- stable
-- easy to call from C or C++
-- safe with memory allocation
-- easy to document
-- easy to use from a DLL
-- future-proof for metadata support
-
-Possible API functions:
-
-```cpp
-RBGI_Load(...)
-RBGI_Save(...)
-RBGI_Free(...)
-RBGI_GetVersion(...)
-RBGI_IsValid(...)
-RBGI_GetLastError(...)
-```
-
-Optional future functions:
-
-```cpp
-RBGI_ReadMetadata(...)
-RBGI_WriteMetadata(...)
-RBGI_GetWidth(...)
-RBGI_GetHeight(...)
-RBGI_GetChannels(...)
-RBGI_ConvertToPNG(...)
-RBGI_ConvertFromPNG(...)
+1.0.0 = first public SDK release
+1.0.1 = bug fix
+1.1.0 = new metadata field support
+2.0.0 = major format/API change
 ```
 
 ---
 
-## Error Handling
+## Suggested file extension rules
 
-The SDK should return clear errors when possible.
+The standard extension should be:
 
-Possible error cases:
-
-- file not found
-- invalid `.RBGI` file
-- unsupported format version
-- unsupported color format
-- failed memory allocation
-- failed read operation
-- failed write operation
-- corrupted image data
+```txt
+.RBGI
+```
 
 Recommended behavior:
 
-```cpp
-if (!RBGI_Load("file.rbgi", &image))
-{
-    const char* error = RBGI_GetLastError();
-}
-```
+- treat `.RBGI` and `.rbgi` as the same extension
+- save using uppercase `.RBGI` for official files
+- do not overwrite files without confirmation in GUI tools
+- validate the file contents, not only the extension
 
 ---
 
-## Memory Management
+## Error handling
 
-If the SDK allocates image memory, the same SDK should free it.
+The SDK should avoid crashing when a file is invalid.
 
-Recommended rule:
+Recommended error cases:
 
 ```txt
-If RBGI_Load allocates it, RBGI_Free should free it.
+RBGI_OK
+RBGI_ERROR_FILE_NOT_FOUND
+RBGI_ERROR_INVALID_FILE
+RBGI_ERROR_UNSUPPORTED_VERSION
+RBGI_ERROR_READ_FAILED
+RBGI_ERROR_WRITE_FAILED
+RBGI_ERROR_INVALID_METADATA
+RBGI_ERROR_OUT_OF_MEMORY
 ```
 
-This helps avoid bugs caused by freeing memory across different runtimes or DLL boundaries.
+A good SDK should return useful error codes so apps can show helpful messages.
 
 ---
 
-## Naming Rules
+## Security notes
 
-Recommended names:
+Programs using the SDK should not blindly trust `.RBGI` files.
 
-```txt
-RBGI
-RBGIFormat
-RBGIFormatSDK
-MozAluz RBGI Format SDK
-```
+Recommended safety checks:
 
-Recommended DLL name:
+- check file size before loading
+- validate width and height
+- reject impossible image sizes
+- check metadata length
+- avoid unsafe memory copying
+- handle corrupted files safely
+- never execute data from a `.RBGI` file
 
-```txt
-RBGIFormat.dll
-```
-
-Recommended header name:
-
-```txt
-RBGIFormat.h
-```
-
-Recommended namespace, if using C++:
-
-```cpp
-namespace RBGI
-{
-}
-```
-
-Recommended C-style prefix:
-
-```txt
-RBGI_
-```
+`.RBGI` files are image/metadata files. They should not contain executable code.
 
 ---
 
-## Legal Notice
+## Relationship to Source BSP Explorer
 
-`.RBGI` and MozAluz RBGI Tools are part of the MozAluz project by sonic Fan Tech.
+`.RBGI` was originally created for **Source BSP Explorer**.
 
-This SDK is provided so developers can work with `.RBGI` files and add support for the format in their own software.
+Its first major purpose was to provide a custom background image format for SBSPE's renderer, especially for background/skybox-style rendering.
 
-The official MozAluz RBGI Viewer and MozAluz RBGI Editor are closed-source applications. This repository does not grant permission to redistribute modified versions of those applications.
+Source BSP Explorer may use `.RBGI` files for:
+
+- renderer background images
+- default viewport backgrounds
+- skybox-style preview images
+- tool-specific visual assets
 
 ---
 
-## License
+## Relationship to MozAluz RBGI Tools
 
-This SDK should include a license file.
+**MozAluz RBGI Tools** are the official applications for `.RBGI` files.
 
-Recommended license:
+The tool suite includes:
 
 ```txt
-MIT License
+MozAluz RBGI Viewer
+MozAluz RBGI Editor
 ```
 
-The MIT License is recommended because it allows developers to freely use the SDK in personal, open-source, or commercial projects as long as the license notice is kept.
+The Viewer is used for viewing `.RBGI` files.  
+The Editor is used for creating and editing `.RBGI` files.
 
-If the repository does not currently include a license, add one before public use.
+The Format SDK is open-source so the format can be supported by other programs, but the Viewer and Editor remain closed-source official tools.
+
+---
+
+## Why open-source only the Format SDK?
+
+Open-sourcing the format layer gives developers the ability to support `.RBGI` without exposing the full official apps.
+
+This has several benefits:
+
+- developers can add `.RBGI` support to their own tools
+- the format can be documented publicly
+- compatibility is easier to maintain
+- bugs in the format code can be found and fixed
+- the official Viewer and Editor can remain controlled official apps
+- the format can grow beyond one program
+
+This keeps the format open while keeping the official applications protected.
+
+---
+
+## Possible future additions
+
+Possible future features for the `.RBGI` format or SDK:
+
+- stronger metadata support
+- preview thumbnails
+- compression options
+- render mode hints
+- cube-map metadata
+- skybox face support
+- background animation metadata
+- HDR or high-bit-depth support
+- alpha channel rules
+- color profile metadata
+- command-line converter
+- `.RBGI` validation tool
+- sample `.RBGI` test files
+- official format specification document
 
 ---
 
@@ -564,121 +672,86 @@ If the repository does not currently include a license, add one before public us
 
 Contributions are welcome for the open-source SDK.
 
-Good contribution areas:
+Good contributions include:
 
 - bug fixes
+- safer file parsing
+- better metadata handling
 - documentation improvements
+- example projects
+- format validation improvements
+- compatibility improvements
 - build fixes
-- example programs
-- validation improvements
-- cross-platform improvements
-- safer memory handling
-- metadata support
-- tests
 
-Please keep contributions focused on the `.RBGI` Format SDK only.
+Please keep contributions focused on the `.RBGI` Format SDK.
 
-Do not submit code for the closed-source Viewer or Editor.
+This repository is not for the source code of MozAluz RBGI Viewer or MozAluz RBGI Editor.
 
 ---
 
-## Possible Future Tools
+## Development rules
 
-The SDK may later include small open-source helper tools such as:
+Recommended development rules for this SDK:
 
 ```txt
-rbgi-info.exe
-rbgi-to-png.exe
-png-to-rbgi.exe
-rbgi-validator.exe
+1. Keep the format simple.
+2. Keep the API easy to use.
+3. Do not break existing .RBGI files without a major version change.
+4. Validate files safely.
+5. Keep metadata optional.
+6. Keep the SDK usable outside of MozAluz tools.
+7. Document format changes.
 ```
 
-These tools would be separate from the official closed-source MozAluz RBGI Viewer and Editor.
-
 ---
 
-## FAQ
+## License
 
-### Is `.RBGI` just PNG?
+This SDK is intended to be open-source.
 
-In version 1, `.RBGI` uses PNG-compatible image data with a custom `.RBGI` extension.
+A permissive license such as the **MIT License** is recommended if the goal is to let other developers freely use `.RBGI` support in their own programs.
 
-The reason for the custom extension is to identify the file as a Render Background Image used by MozAluz tools and future render-background workflows.
+Make sure the repository includes a `LICENSE` file.
 
-Future versions may add metadata or render-specific features.
+Example license choice:
 
----
+```txt
+MIT License
+```
 
-### Can I use `.RBGI` in my own program?
-
-Yes. That is the purpose of this SDK.
-
-You can use the open-source format SDK to add `.RBGI` loading and saving support to your own programs.
-
----
-
-### Are the Viewer and Editor open-source?
-
-No.
-
-The official MozAluz RBGI Viewer and MozAluz RBGI Editor are closed-source and are not included in this repository.
-
-Only the `.RBGI` Format SDK / DLL source files are open-source.
-
----
-
-### Can I make my own `.RBGI` viewer?
-
-Yes.
-
-You can use this SDK to make your own `.RBGI` viewer, converter, plugin, or tool.
-
-However, do not claim that your program is the official MozAluz RBGI Viewer unless it is actually made and released by the MozAluz project.
-
----
-
-### Can I make my own `.RBGI` editor?
-
-Yes.
-
-You can use the SDK to make your own editor or tool that supports `.RBGI`.
-
-The official MozAluz RBGI Editor is still closed-source and separate from this SDK.
-
----
-
-### Can I use this in a commercial program?
-
-That depends on the license included with this repository.
-
-If the project uses the MIT License, then yes, commercial use is allowed as long as the license terms are followed.
+The official Viewer and Editor are separate closed-source applications and are not covered by this SDK repository unless stated otherwise.
 
 ---
 
 ## Credits
 
-Created by:
+`.RBGI` / **Render Background Image** was created by **sonic Fan Tech**.
+
+Originally created for:
 
 ```txt
-sonic Fan Tech
+Source BSP Explorer
 ```
 
-Project:
+Official tools:
 
 ```txt
-MozAluz RBGI Tools
+MozAluz RBGI Viewer
+MozAluz RBGI Editor
 ```
 
-Format:
+Open-source component:
 
 ```txt
-.RBGI - Render Background Image
+.RBGI Format SDK / Format DLL
 ```
 
 ---
 
-## Final Note
+## Project status
 
-The goal of this repository is to keep the `.RBGI` format open, documented, and easy to support while keeping the official MozAluz RBGI Viewer and Editor as closed-source official applications.
+This SDK is the public/open-source format layer for `.RBGI`.
 
-If you want to add `.RBGI` support to your own software, this SDK is the recommended starting point.
+The format may continue to grow as Source BSP Explorer, MozAluz RBGI Tools, and other related projects improve.
+
+The goal is to keep `.RBGI` easy to understand, easy to support, and useful for render-background images.
